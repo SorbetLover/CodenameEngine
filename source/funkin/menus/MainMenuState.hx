@@ -85,7 +85,7 @@ class MainMenuState extends MusicBeatState
 		versionText.y -= versionText.height;
 		versionText.scrollFactor.set();
 		add(versionText);
-
+		versionText.text = versionText.text + " SORBETLOVER";
 		changeItem();
 
 		devModeWarning = new FunkinText(0, FlxG.height - 50, 1280, "You have to enable DEVELOPER MODE in the miscellaneous settings!", 24);
