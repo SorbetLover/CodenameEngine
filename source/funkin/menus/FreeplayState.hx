@@ -533,11 +533,11 @@ class FreeplaySonglist {
 			var oldPath = Paths.txt('freeplaySonglist');
 
 			if(FlxG.save.data.letocinhaMode == null) { FlxG.save.data.letocinhaMode = false; }
-		
-			var newPath = FlxG.save.data.letocinhaMode ? Paths.txt('config/freeplaySonglist-alt') : Paths.txt('config/freeplaySonglist');
-			if(FileSystem.exists(newPath) == false) {
-				newPath = Paths.txt('config/freeplaySonglist');
+			/// letocinhamode
+			if (!Paths.assetsTree.existsSpecific(newPath, "TEXT", source)) {
+			    newPath = Paths.txt('config/freeplaySonglist');
 			}
+			///
 			if (Paths.assetsTree.existsSpecific(newPath, "TEXT", source)) songsFound = CoolUtil.coolTextFile(newPath);
 			else if (Paths.assetsTree.existsSpecific(oldPath, "TEXT", source)) {
 				Logs.warn("data/freeplaySonglist.txt is deprecated and will be removed in the future. Please move the file to data/config/", DARKYELLOW, "FreeplaySonglist");
