@@ -534,6 +534,7 @@ class FreeplaySonglist {
 
 			if(FlxG.save.data.letocinhaMode == null) { FlxG.save.data.letocinhaMode = false; }
 			/// letocinhamode
+			var newPath = FlxG.save.data.letocinhaMode ? Paths.txt('config/freeplaySonglist-alt') : Paths.txt('config/freeplaySonglist');
 			if (!Paths.assetsTree.existsSpecific(newPath, "TEXT", source)) {
 			    newPath = Paths.txt('config/freeplaySonglist');
 			}
