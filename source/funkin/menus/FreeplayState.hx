@@ -9,6 +9,7 @@ import funkin.backend.scripting.events.menu.freeplay.*;
 import funkin.backend.system.Conductor;
 import funkin.game.HealthIcon;
 import funkin.savedata.FunkinSave;
+import sys.FileSystem;
 
 using StringTools;
 
@@ -113,6 +114,7 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
+		if(FlxG.save.data.letocinhaMode == null) { FlxG.save.data.letocinhaMode = false; }
 		CoolUtil.playMenuSong();
 		songList = FreeplaySonglist.get();
 		songs = songList.songs;
@@ -187,6 +189,7 @@ class FreeplayState extends MusicBeatState
 		changeCoopMode(0, true);
 
 		interpColor = new FlxInterpolateColor(bg.color);
+
 	}
 
 	#if PRELOAD_ALL
@@ -528,7 +531,13 @@ class FreeplaySonglist {
 		var songsFound:Array<String> = null;
 		if (useTxt) {
 			var oldPath = Paths.txt('freeplaySonglist');
-			var newPath = Paths.txt('config/freeplaySonglist');
+
+			if(FlxG.save.data.letocinhaMode == null) { FlxG.save.data.letocinhaMode = false; }
+		
+			var newPath = FlxG.save.data.letocinhaMode ? Paths.txt('config/freeplaySonglist-alt') : Paths.txt('config/freeplaySonglist');
+			if(FileSystem.exists(newPath) == false) {
+				newPath = Paths.txt('config/freeplaySonglist');
+			}
 			if (Paths.assetsTree.existsSpecific(newPath, "TEXT", source)) songsFound = CoolUtil.coolTextFile(newPath);
 			else if (Paths.assetsTree.existsSpecific(oldPath, "TEXT", source)) {
 				Logs.warn("data/freeplaySonglist.txt is deprecated and will be removed in the future. Please move the file to data/config/", DARKYELLOW, "FreeplaySonglist");
