@@ -76,7 +76,7 @@ class Main extends Sprite
 
 		instance = this;
 
-		CrashHandler.init();}
+		CrashHandler.init();
 		
 		addChild(game = new FunkinGame(gameWidth, gameHeight, MainState, Options.framerate, Options.framerate, skipSplash, startFullscreen));
 
