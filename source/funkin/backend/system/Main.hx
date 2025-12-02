@@ -44,7 +44,7 @@ class Main extends Sprite
 	#if !mobile
 	public static var framerateSprite:Framerate;
 	#end
-
+	
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels).
 	var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels).
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
@@ -77,7 +77,11 @@ class Main extends Sprite
 		instance = this;
 
 		CrashHandler.init();
-
+		if(FlxG.save.data.customGameSize != null && FlxG.save.data.customGameSize[0] != null && FlxG.save.data.customGameSize[1] != null){
+			gameWidth = FlxG.save.data.customGameSize[0];
+			gameHeight = FlxG.save.data.customGameSize[1];
+		}
+		
 		addChild(game = new FunkinGame(gameWidth, gameHeight, MainState, Options.framerate, Options.framerate, skipSplash, startFullscreen));
 
 		#if (!mobile && !web)
