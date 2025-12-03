@@ -78,6 +78,25 @@ class Main extends Sprite
 
 		CrashHandler.init();
 		
+
+		var path = "./assets/gameSize.txt";
+		if (FileSystem.exists(path))
+		{
+			var content = File.getContent(path).split("\n");
+
+			if (content.length >= 2)
+			{
+				var w = Std.parseInt(content[0]);
+				var h = Std.parseInt(content[1]);
+
+				if (w != null && h != null)
+				{
+					gameWidth = w;
+					gameHeight = h;
+				}
+			}
+		}			
+	
 		addChild(game = new FunkinGame(gameWidth, gameHeight, MainState, Options.framerate, Options.framerate, skipSplash, startFullscreen));
 
 		#if (!mobile && !web)

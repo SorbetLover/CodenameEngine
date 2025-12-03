@@ -1,3 +1,7 @@
+changes 
+- added alt freeplay txt for better organization if letocinhaMode is on
+- Custom Main.hx game size via **root/assets/gameSize.txt**
+
 # Codename Engine features
 This markdown file contains most of the main features Codename has, separated into multiple categories.
 
