@@ -1,4 +1,5 @@
 changes 
+- var on the conductor to check if this custom repo is being used
 - added alt freeplay txt for better organization if letocinhaMode is on
 - Custom Main.hx game size via **root/assets/gameSize.txt**
 

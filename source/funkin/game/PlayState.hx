@@ -42,6 +42,9 @@ using StringTools;
 @:access(funkin.game.StrumLine)
 class PlayState extends MusicBeatState
 {
+	public var unbindIconsPos:Bool = false;
+
+
 	/**
 	 * Current PlayState instance.
 	 */
@@ -1323,6 +1326,7 @@ class PlayState extends MusicBeatState
 	}
 
 	dynamic function updateIconPositions() {
+		if(unbindIconsPos) return;
 		var iconOffset = Flags.ICON_OFFSET;
 		var healthBarPercent = healthBar.percent;
 

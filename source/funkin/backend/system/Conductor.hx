@@ -34,6 +34,7 @@ final class Conductor
 {
 	/// identification 
 	public static var isSorbetBuild:Bool = true;
+	
 	public static function getBeats(?every:BeatType, interval:Float, offset:Float = 0):Float {
 		final beat = switch(every) {
 			case MEASURE: curMeasureFloat;
