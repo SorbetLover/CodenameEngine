@@ -40,24 +40,40 @@ jobs:
         run: |
           echo "HXCPP_COMPILE_THREADS=4" >> $GITHUB_ENV
           echo "HXCPP_COMPILE_CACHE=$HOME/.hxcpp" >> $GITHUB_ENV
+          echo "HXCPP_VERBOSE=1" >> $GITHUB_ENV
           
-      - name: Instalar e configurar HXCPP
+      - name: Instalar e configurar dependências
         run: |
-          # Instalar hxcpp se não existir
-          haxelib install hxcpp
+          # Atualizar haxelib
+          haxelib update
           
-          # Reconstruir hxcpp para garantir que as bibliotecas estão disponíveis
-          haxelib run hxcpp rebuild
+          # Instalar dependências básicas
+          haxelib install lime
+          haxelib install openfl
+          haxelib install hxcpp 4.3.2
           
-          # Verificar se as bibliotecas foram criadas
-          ls -la ~/.hxcpp/ || true
-          ls -la ~/.hxcpp/hxcpp_zlib_impl/lib/ || true
-          ls -la ~/.hxcpp/hxcpp_zip_api/lib/ || true
+          # Configurar hxcpp corretamente
+          haxelib set hxcpp 4.3.2
+          
+          # Usar o método alternativo para configurar hxcpp
+          cd ~/.haxe/hxcpp/4,3,2
+          haxe hxcpp.hxml
+          
+          # Ou usar o script de build do hxcpp
+          cd ~/.haxe/hxcpp/4,3,2/project
+          neko build.n linux
+          
+      - name: Verificar instalação do hxcpp
+        run: |
+          echo "=== Verificando hxcpp ==="
+          ls -la ~/.haxe/hxcpp/
+          echo "=== Verificando .hxcpp ==="
+          ls -la ~/.hxcpp/ || echo "Diretório .hxcpp não existe ainda"
           
       - name: Installing LibVLC
         run: |
           sudo apt-get update
-          sudo apt-get install -y libvlc-dev libvlccore-dev
+          sudo apt-get install -y libvlc-dev libvlccore-dev vlc
           
       - name: Installing/Updating libraries
         run: |
@@ -68,16 +84,28 @@ jobs:
           # Limpar builds anteriores
           haxelib run lime clean linux
           
-          # Build release
-          haxelib run lime build linux -release
+          # Tentar build com opções verbosas
+          haxelib run lime build linux -release -verbose
+          
+      - name: Verificar se o executável foi criado
+        run: |
+          if [ -f "export/release/linux/bin/CodenameEngine" ]; then
+            echo "✓ Build successful! Executable found."
+            ls -la export/release/linux/bin/
+          else
+            echo "✗ Build failed. Executable not found."
+            ls -la export/release/linux/ || true
+          fi
           
       - name: Uploading artifact (executable)
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: Codename Engine (Executable Only)
           path: export/release/linux/bin/CodenameEngine
           
       - name: Uploading artifact (entire build)
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: Codename Engine
@@ -114,8 +142,6 @@ jobs:
             export/release/linux/obj/
 
   debug_build:
-    if: contains(github.event.head_commit.message, '&debugbuild')
-  
     name: Linux Debug Build
     permissions: write-all
     runs-on: ubuntu-24.04
@@ -148,16 +174,24 @@ jobs:
         run: |
           echo "HXCPP_COMPILE_THREADS=4" >> $GITHUB_ENV
           echo "HXCPP_COMPILE_CACHE=$HOME/.hxcpp" >> $GITHUB_ENV
+          echo "HXCPP_VERBOSE=1" >> $GITHUB_ENV
           
-      - name: Instalar e configurar HXCPP
+      - name: Instalar e configurar dependências
         run: |
-          haxelib install hxcpp
-          haxelib run hxcpp rebuild
+          # Instalar dependências básicas
+          haxelib install lime
+          haxelib install openfl
+          haxelib install hxcpp 4.3.2
+          haxelib set hxcpp 4.3.2
+          
+          # Compilar bibliotecas hxcpp manualmente
+          cd ~/.haxe/hxcpp/4,3,2/project
+          neko build.n linux
           
       - name: Installing LibVLC
         run: |
           sudo apt-get update
-          sudo apt-get install -y libvlc-dev libvlccore-dev
+          sudo apt-get install -y libvlc-dev libvlccore-dev vlc
           
       - name: Installing/Updating libraries
         run: |
@@ -166,9 +200,20 @@ jobs:
       - name: Building the game
         run: |
           haxelib run lime clean linux
-          haxelib run lime build linux -debug
+          haxelib run lime build linux -debug -verbose
+          
+      - name: Verificar se o executável debug foi criado
+        run: |
+          if [ -f "export/debug/linux/bin/CodenameEngine" ]; then
+            echo "✓ Debug build successful! Executable found."
+            ls -la export/debug/linux/bin/
+          else
+            echo "✗ Debug build failed. Executable not found."
+            ls -la export/debug/linux/ || true
+          fi
           
       - name: Uploading artifact (entire build)
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: Codename Engine Debug
