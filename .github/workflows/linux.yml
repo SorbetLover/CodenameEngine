@@ -55,13 +55,11 @@ jobs:
           # Configurar hxcpp corretamente
           haxelib set hxcpp 4.3.2
           
-          # Usar o método alternativo para configurar hxcpp
-          cd ~/.haxe/hxcpp/4,3,2
-          haxe hxcpp.hxml
+          # Remover o diretório .hxcpp para forçar recompilação
+          rm -rf ~/.hxcpp
           
-          # Ou usar o script de build do hxcpp
-          cd ~/.haxe/hxcpp/4,3,2/project
-          neko build.n linux
+          # Verificar a instalação do hxcpp
+          haxelib path hxcpp
           
       - name: Verificar instalação do hxcpp
         run: |
