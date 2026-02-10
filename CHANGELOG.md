@@ -1,6 +1,6 @@
 # v0.4.0 - First (proper) beta release
 
-This changelog lists every change that has been added since the last update (including public changes).
+This changelog lists every change that has been added since the last update (including public changes). 
 
 ## Flags System
 
