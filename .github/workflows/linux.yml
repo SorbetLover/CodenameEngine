@@ -7,6 +7,7 @@ on:
 jobs:
   build:
     if: contains(github.event.head_commit.message, '&build')
+
     name: Linux Build
     permissions: write-all
     runs-on: ubuntu-24.04
@@ -19,229 +20,48 @@ jobs:
         with:
           haxe-version: 4.3.7
           
-      - name: Configurar Haxelib
+      - name: Configurar sistema
         run: |
-          # Garantir que o diretório haxelib existe
-          mkdir -p ~/haxelib
+          # Configurar haxelib
           haxelib setup ~/haxelib
           
-      - name: Restore existing build cache for faster compilation
-        uses: actions/cache@v4.2.3
-        with:
-          key: cache-build-linux
-          path: |
-            ~/.haxelib/
-            ~/.hxcpp/
-            export/release/linux/haxe/
-            export/release/linux/obj/
-            
-      - name: Configurar variáveis de ambiente
-        run: |
-          echo "HXCPP_COMPILE_THREADS=4" >> $GITHUB_ENV
-          echo "HXCPP_COMPILE_CACHE=$HOME/.hxcpp" >> $GITHUB_ENV
-          echo "HXCPP_VERBOSE=1" >> $GITHUB_ENV
+          # Instalar ferramentas de compilação
+          sudo apt-get update
+          sudo apt-get install -y neko neko-dev libgc-dev
           
-      - name: Instalar e configurar dependências
+      - name: Instalar dependências do projeto
         run: |
-          # Atualizar haxelib
-          haxelib update
-          
-          # Instalar dependências básicas
+          # Instalar dependências principais
           haxelib install lime
-          haxelib install openfl
-          haxelib install hxcpp 4.3.2
+          haxelib install hxcpp
           
-          # Configurar hxcpp corretamente
-          haxelib set hxcpp 4.3.2
-          
-          # Remover o diretório .hxcpp para forçar recompilação
-          rm -rf ~/.hxcpp
-          
-          # Verificar a instalação do hxcpp
-          haxelib path hxcpp
-          
-      - name: Verificar instalação do hxcpp
-        run: |
-          echo "=== Verificando hxcpp ==="
-          ls -la ~/.haxe/hxcpp/
-          echo "=== Verificando .hxcpp ==="
-          ls -la ~/.hxcpp/ || echo "Diretório .hxcpp não existe ainda"
+          # Outras dependências que seu projeto precisa
+          haxe -cp commandline -D analyzer-optimize --run Main setup -s
           
       - name: Installing LibVLC
         run: |
-          sudo apt-get update
           sudo apt-get install -y libvlc-dev libvlccore-dev vlc
           
-      - name: Installing/Updating libraries
+      - name: Compilar projeto
         run: |
-          haxe -cp commandline -D analyzer-optimize --run Main setup -s
-          
-      - name: Building the game
-        run: |
-          # Limpar builds anteriores
+          # Limpar tudo
+          rm -rf ~/.hxcpp
           haxelib run lime clean linux
           
-          # Tentar build com opções verbosas
-          haxelib run lime build linux -release -verbose
+          # Build com recompilação forçada do hxcpp
+          haxelib run lime build linux -release -D HXCPP_REBUILD_ALL
           
-      - name: Verificar se o executável foi criado
+      - name: Verificar build
         run: |
           if [ -f "export/release/linux/bin/CodenameEngine" ]; then
-            echo "✓ Build successful! Executable found."
-            ls -la export/release/linux/bin/
+            echo "✅ Build successful!"
           else
-            echo "✗ Build failed. Executable not found."
-            ls -la export/release/linux/ || true
+            echo "❌ Build failed!"
+            exit 1
           fi
           
-      - name: Uploading artifact (executable)
-        if: success()
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Codename Engine (Executable Only)
-          path: export/release/linux/bin/CodenameEngine
-          
-      - name: Uploading artifact (entire build)
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: Codename Engine
+          name: CodenameEngine-Linux
           path: export/release/linux/bin/
-          
-      - name: Clearing already existing cache
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const caches = await github.rest.actions.getActionsCacheList({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            })
-            for (const cache of caches.data.actions_caches) {
-              if (cache.key == "cache-build-linux") {
-                console.log('Clearing ' + cache.key + '...')
-                await github.rest.actions.deleteActionsCacheById({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  cache_id: cache.id,
-                })
-                console.log("Cache cleared.")
-              }
-            }
-            
-      - name: Uploading new cache
-        uses: actions/cache@v4.2.3
-        with:
-          key: cache-build-linux
-          path: |
-            ~/.haxelib/
-            ~/.hxcpp/
-            export/release/linux/haxe/
-            export/release/linux/obj/
-
-  debug_build:
-    name: Linux Debug Build
-    permissions: write-all
-    runs-on: ubuntu-24.04
-    needs: build
-    steps:
-      - name: Pulling the new commit
-        uses: actions/checkout@v4
-        
-      - name: Setting up Haxe
-        uses: krdlab/setup-haxe@v2
-        with:
-          haxe-version: 4.3.7
-          
-      - name: Configurar Haxelib
-        run: |
-          mkdir -p ~/haxelib
-          haxelib setup ~/haxelib
-          
-      - name: Restore existing build cache for faster compilation
-        uses: actions/cache@v4.2.3
-        with:
-          key: cache-build-linux-debug
-          path: |
-            ~/.haxelib/
-            ~/.hxcpp/
-            export/debug/linux/haxe/
-            export/debug/linux/obj/
-            
-      - name: Configurar variáveis de ambiente
-        run: |
-          echo "HXCPP_COMPILE_THREADS=4" >> $GITHUB_ENV
-          echo "HXCPP_COMPILE_CACHE=$HOME/.hxcpp" >> $GITHUB_ENV
-          echo "HXCPP_VERBOSE=1" >> $GITHUB_ENV
-          
-      - name: Instalar e configurar dependências
-        run: |
-          # Instalar dependências básicas
-          haxelib install lime
-          haxelib install openfl
-          haxelib install hxcpp 4.3.2
-          haxelib set hxcpp 4.3.2
-          
-          # Compilar bibliotecas hxcpp manualmente
-          cd ~/.haxe/hxcpp/4,3,2/project
-          neko build.n linux
-          
-      - name: Installing LibVLC
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libvlc-dev libvlccore-dev vlc
-          
-      - name: Installing/Updating libraries
-        run: |
-          haxe -cp commandline -D analyzer-optimize --run Main setup -s
-          
-      - name: Building the game
-        run: |
-          haxelib run lime clean linux
-          haxelib run lime build linux -debug -verbose
-          
-      - name: Verificar se o executável debug foi criado
-        run: |
-          if [ -f "export/debug/linux/bin/CodenameEngine" ]; then
-            echo "✓ Debug build successful! Executable found."
-            ls -la export/debug/linux/bin/
-          else
-            echo "✗ Debug build failed. Executable not found."
-            ls -la export/debug/linux/ || true
-          fi
-          
-      - name: Uploading artifact (entire build)
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: Codename Engine Debug
-          path: export/debug/linux/bin/
-          
-      - name: Clearing already existing cache
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const caches = await github.rest.actions.getActionsCacheList({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            })
-            for (const cache of caches.data.actions_caches) {
-              if (cache.key == "cache-build-linux-debug") {
-                console.log('Clearing ' + cache.key + '...')
-                await github.rest.actions.deleteActionsCacheById({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  cache_id: cache.id,
-                })
-                console.log("Cache cleared.")
-              }
-            }
-            
-      - name: Uploading new cache
-        uses: actions/cache@v4.2.3
-        with:
-          key: cache-build-linux-debug
-          path: |
-            ~/.haxelib/
-            ~/.hxcpp/
-            export/debug/linux/haxe/
-            export/debug/linux/obj/
