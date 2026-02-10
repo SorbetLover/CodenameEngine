@@ -7,6 +7,7 @@ on:
 
 jobs:
   cleanup:
+    if: contains(github.event.head_commit.message, '&build')
     runs-on: ubuntu-latest
     permissions:
       actions: write

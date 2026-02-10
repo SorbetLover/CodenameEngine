@@ -5,9 +5,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  if: contains(github.event.head_commit.message, '&build')
 
   build:
+    if: contains(github.event.head_commit.message, '&buildwindows')
     name: Windows Build
     permissions: write-all
     runs-on: windows-latest
