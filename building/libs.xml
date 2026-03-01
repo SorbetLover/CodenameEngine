@@ -32,7 +32,7 @@
 
 		<git name="hxcpp" url="https://github.com/CodenameCrew/cne-hxcpp" />
 
-		<git name="flixel-animate" url="https://github.com/MaybeMaru/flixel-animate/" skipDeps="true"/>
+		<git name="flixel-animate" url="https://github.com/CodenameCrew/cne-flixel-animate/" skipDeps="true"/>
 	</if>
 
 	<!-- Hxcpp Building -->
