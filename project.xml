@@ -219,17 +219,17 @@
 
 	<haxedef name="HXCPP_M32" if="32bit"/>
 	<haxedef name="HXCPP_DEBUG_LINK" if="debug"/>
-	<haxedef name="HXCPP_CPP20"/>
+	<!--<haxedef name="HXCPP_CPP20"/>-->
 	<!--<haxedef name="HXCPP_CLANG"/>-->
 	<haxedef name="HXCPP_MSVC"/>
 	<haxedef name="HXCPP_GC_BIG_BLOCKS"/>
-	<haxedef name="HXCPP_GC_GENERATIONAL"/>
+	<!--<haxedef name="HXCPP_GC_GENERATIONAL"/>-->
 	<haxedef name="HXCPP_GC_DYNAMIC_SIZE"/>
 	<haxedef name="HXCPP_CHECK_POINTER"/>
 	<haxedef name="HXCPP_STACK_LINE"/>
 	<haxedef name="HXCPP_STACK_TRACE"/>
 	<haxedef name="HXCPP_CATCH_SEGV"/>
-	<haxedef name="HXCPP_FAST_LINK"/>
+	<!--<haxedef name="HXCPP_FAST_LINK"/>-->
 	<!--<haxedef name="HXCPP_ALIGN_ALLOC"/>--> <!--hxcpp.h(71): warning C4005: 'HXCPP_ALIGN_ALLOC': macro redefinition-->
 
 	<haxedef name="analyzer-optimize" unless="debug"/>
