@@ -32,7 +32,7 @@
 	</if>
 
 	<!-- Hxcpp Building -->
-	<if cond="build-hxcpp">
+	<if cond="build-hxcpp || all">
 		<print pretty="true">Rebuilding Hxcpp...</print>
 
 		<!-- Build hxcpp -->
