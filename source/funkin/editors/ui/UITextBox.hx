@@ -166,7 +166,7 @@ class UITextBox extends UISliceSprite implements IUIFocusable {
 
 				changeSelection(1);
 			case BACKSPACE:
-				FlxG.sound.play(Paths.sound(Flags.DEFAULT_EDITOR_TEXTREMOVE_SOUND));
+				UIState.playEditorSound(Flags.DEFAULT_EDITOR_TEXTREMOVE_SOUND);
 
 				if (modifier.ctrlKey) {
 					var wordBounds = findWholeWord(label.text, position);
@@ -182,7 +182,7 @@ class UITextBox extends UISliceSprite implements IUIFocusable {
 					changeSelection(-1);
 				}
 			case DELETE:
-				FlxG.sound.play(Paths.sound(Flags.DEFAULT_EDITOR_TEXTREMOVE_SOUND));
+				UIState.playEditorSound(Flags.DEFAULT_EDITOR_TEXTREMOVE_SOUND);
 
 				if (modifier.ctrlKey) {
 					var wordBounds = findWholeWord(label.text, position, true);
@@ -201,7 +201,7 @@ class UITextBox extends UISliceSprite implements IUIFocusable {
 			case END:
 				position = label.text.length;
 			case V:
-				FlxG.sound.play(Paths.sound(Flags.DEFAULT_EDITOR_PASTE_SOUND));
+				UIState.playEditorSound(Flags.DEFAULT_EDITOR_PASTE_SOUND);
 				// Hey lj here, fixed copying because before we checked if the modifier was left or right ctrl
 				// but somehow it gave a int outside of the KeyModifier's range :sob:
 				// apparently there is a boolean that just checks for you. yw :D
@@ -214,7 +214,7 @@ class UITextBox extends UISliceSprite implements IUIFocusable {
 				if (data != null)
 					onTextInput(data);
 			case C:
-				FlxG.sound.play(Paths.sound(Flags.DEFAULT_EDITOR_COPY_SOUND));
+				UIState.playEditorSound(Flags.DEFAULT_EDITOR_COPY_SOUND);
 				// if we are not holding ctrl, ignore
 				if (!modifier.ctrlKey)
 					return;
@@ -222,7 +222,7 @@ class UITextBox extends UISliceSprite implements IUIFocusable {
 				// copying
 				Clipboard.generalClipboard.setData(TEXT_FORMAT, label.text);
 			case X:
-				FlxG.sound.play(Paths.sound(Flags.DEFAULT_EDITOR_CUT_SOUND));
+				UIState.playEditorSound(Flags.DEFAULT_EDITOR_CUT_SOUND);
 
 				// if we are not holding ctrl, ignore
 				if (!modifier.ctrlKey)
@@ -236,7 +236,7 @@ class UITextBox extends UISliceSprite implements IUIFocusable {
 				if (modifier.ctrlKey || modifier.altKey || modifier.shiftKey)
 					return;
 
-				FlxG.sound.play(Paths.sound(Flags.DEFAULT_EDITOR_TEXTTYPE_SOUND));
+				UIState.playEditorSound(Flags.DEFAULT_EDITOR_TEXTTYPE_SOUND);
 		}
 	}
 
