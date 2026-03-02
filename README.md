@@ -1,7 +1,7 @@
 note to self
 
-- &build for linux
-- &buildwin for windows
+- &buildlin for linux
+- &buildwindows for windows
 - &buildmac for rich people
 
 
