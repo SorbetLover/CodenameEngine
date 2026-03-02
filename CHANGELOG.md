@@ -5,7 +5,7 @@ This changelog lists every change that has been added since the last update (inc
 ## Flags System
 
 - Added a brand new flags system, which allows you to modify the game constants using a simple `flags.ini` file ([f8d1cf0](https://github.com/CodenameCrew/CodenameEngine/commit/f8d1cf08ad9f6cdda4e971a3d8adff6fce5130d2))
-- Added the ability to change the way the mod songs/weeks are added into the menu ([cb1d6fc](https://github.com/CodenameCrew/CodenameEngine/commit/cb1d6fcacf4ad0e2888ed7e76d16a6f85c09b021))
+- Added the ability to change the way the mod songs/weeks are added into the menu ([cb1d6fc](https://github.com/CodenameCrew/CodenameEngine/commit/cb1d6fcacf4ad0e2888ed7e76d16a6f85c09b021)) 
 - Added the ability to disable editors, transtions and beta warning state ([90a8c27](https://github.com/CodenameCrew/CodenameEngine/commit/90a8c2711ce36c9eaf85e705d551d46876991aa9))
 - Added the ability to set the default Transition, Pause, Game Over scripts ([fd0c188](https://github.com/CodenameCrew/CodenameEngine/commit/fd0c188577cf58e34e8ed706e59903a989ee2d11))
 - Added the ability to set the default glsl version ([cbbb598](https://github.com/CodenameCrew/CodenameEngine/commit/cbbb598f52b3f7c0f156cf72cd03e165aa38a4f1))
