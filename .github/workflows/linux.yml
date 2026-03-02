@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    if: contains(github.event.head_commit.message, '&build')
+    if: contains(github.event.head_commit.message, '&buildlin')
 
     name: Linux Build
     permissions: write-all
