@@ -173,7 +173,7 @@ class UITextBox extends UISliceSprite implements IUIFocusable {
 				changeSelection(1);
 				return;
 			case BACKSPACE:
-				FlxG.sound.play(Paths.sound(Flags.DEFAULT_EDITOR_TEXTREMOVE_SOUND));
+				UIState.playEditorSound(Flags.DEFAULT_EDITOR_TEXTREMOVE_SOUND);
 
 				if (modifier.ctrlKey) {
 					var wordBounds = findWholeWord(label.text, position);
@@ -190,7 +190,7 @@ class UITextBox extends UISliceSprite implements IUIFocusable {
 				}
 				return;
 			case DELETE:
-				FlxG.sound.play(Paths.sound(Flags.DEFAULT_EDITOR_TEXTREMOVE_SOUND));
+				UIState.playEditorSound(Flags.DEFAULT_EDITOR_TEXTREMOVE_SOUND);
 
 				if (modifier.ctrlKey) {
 					var wordBounds = findWholeWord(label.text, position, true);
@@ -213,7 +213,7 @@ class UITextBox extends UISliceSprite implements IUIFocusable {
 				return;
 			case V:
 				if (modifier.ctrlKey) {
-					FlxG.sound.play(Paths.sound(Flags.DEFAULT_EDITOR_PASTE_SOUND));
+					UIState.playEditorSound(Flags.DEFAULT_EDITOR_PASTE_SOUND);
 
 					// Hey lj here, fixed copying because before we checked if the modifier was left or right ctrl
 					// but somehow it gave a int outside of the KeyModifier's range :sob:
@@ -226,13 +226,13 @@ class UITextBox extends UISliceSprite implements IUIFocusable {
 				}
 			case C:
 				if (modifier.ctrlKey) {
-					FlxG.sound.play(Paths.sound(Flags.DEFAULT_EDITOR_COPY_SOUND));
+					UIState.playEditorSound(Flags.DEFAULT_EDITOR_COPY_SOUND);
 
 					Clipboard.generalClipboard.setData(TEXT_FORMAT, label.text);
 				}
 			case X:
 				if (modifier.ctrlKey) {
-					FlxG.sound.play(Paths.sound(Flags.DEFAULT_EDITOR_CUT_SOUND));
+					UIState.playEditorSound(Flags.DEFAULT_EDITOR_CUT_SOUND);
 
 					Clipboard.generalClipboard.setData(TEXT_FORMAT, label.text);
 					position = 0;
@@ -243,7 +243,7 @@ class UITextBox extends UISliceSprite implements IUIFocusable {
 		}
 
 		if (modifier.ctrlKey || modifier.altKey || modifier.shiftKey) return;
-		FlxG.sound.play(Paths.sound(Flags.DEFAULT_EDITOR_TEXTTYPE_SOUND));
+		UIState.playEditorSound(Flags.DEFAULT_EDITOR_TEXTTYPE_SOUND);
 	}
 
 	public function changeSelection(change:Int) {
