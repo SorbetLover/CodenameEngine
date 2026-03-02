@@ -222,6 +222,8 @@
 	<!--<haxedef name="HXCPP_CPP20"/>-->
 	<!--<haxedef name="HXCPP_CLANG"/>-->
 	<haxedef name="HXCPP_MSVC"/>
+	<!-- This seems to causes more harm, but to be fair, its mostly because of text rendering -->
+	<!-- This is really important to fix honestly, try to get cairo text rendering not memory leak in the future -->
 	<haxedef name="HXCPP_GC_BIG_BLOCKS"/>
 	<!--<haxedef name="HXCPP_GC_GENERATIONAL"/>-->
 	<haxedef name="HXCPP_GC_DYNAMIC_SIZE"/>
